@@ -9,12 +9,12 @@ size_t num_of_words = 0;
 
 
 %%
-\n([\t ]*)\n {printf(""); num_of_lines++;}
-^([\t ]+) {(printf(""));}
+^[\t ]([\t ]*) {printf("");}
+([\t ]*)[\t ]$ {printf("");}
 [\t ]+ {printf(" ");}
-([\t ]+)$ {(printf(""));}
-\n {printf("\n"); num_of_lines++;}
-[^\t ]+ {printf("%s", yytext); num_of_words++;};
+[^\t \n]+ {ECHO; num_of_words++;};
+(\n([\t \n]*))/([^\t ]) {printf("\n"); num_of_lines++;}
+\n([\t \n]*) {printf(""); num_of_lines++;}
 %%
 
 int yywrap() {
