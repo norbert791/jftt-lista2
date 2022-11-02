@@ -19,6 +19,21 @@ typedef struct Token {
   EAction type;
 }
 
+enum {
+  Token_Queue_Size = 2000;
+};
+
+static size_t current_size = 0;
+
+static int token_push(Token token)
+static int token_resolve(Token token)
+
+static Token queue[Token_Queue_Size];
+
+static int token_push(Token token) {
+  
+}
+
 %}
 
 %x STRING_SINGLE STRING_DOUBLE STRING_LINES COMMENT
