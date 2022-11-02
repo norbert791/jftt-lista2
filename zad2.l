@@ -3,25 +3,27 @@
 #include <stddef.h>
 int yywrap();
 int yylex();
-size_t num_of_lines = 0;
-size_t num_of_words = 0;
 %}
 
-%s STRING_SINGLE STRING_DOUBLE STRING_LINES
+%x STRING_SINGLE STRING_DOUBLE STRING_LINES COMMENT
 
 %%
-<INITIAL>[\'] {BEGIN(STRING_SINGLE);puts("[']start"); ECHO;}
-<STRING_SINGLE>[\'] {BEGIN(INITIAL);puts("[']end"); ECHO;}
-<INITIAL>[\"]{3} {BEGIN(STRING_LINES);puts("[\"\"\"]start"); ECHO;}
-<STRING_LINES>[\"]{3} {BEGIN(INITIAL);puts("[\"\"\"]end"); ECHO;}
-<INITIAL>[\"] {BEGIN(STRING_DOUBLE);puts("[\"]start"); ECHO;}
-<STRING_DOUBLE>[\"] {BEGIN(INITIAL);puts("[\"]end"); ECHO;}
-<INITIAL>[#](.)* {printf("");}
-(.|\n)* {printf(""); ECHO;}
+[\'] {BEGIN(STRING_SINGLE); ECHO;}
+<STRING_SINGLE>[\'] {BEGIN(INITIAL); ECHO;}
+[\"]{3} {BEGIN(STRING_LINES); ECHO;}
+<STRING_LINES>[\"]{3} {BEGIN(INITIAL); ECHO;}
+[\"] {BEGIN(STRING_DOUBLE); ECHO;}
+<STRING_DOUBLE>[\"] {BEGIN(INITIAL); ECHO;}
+[#] {printf(""); BEGIN(COMMENT);}
+<COMMENT>(.) {printf("");}
+<COMMENT>[\n] {ECHO; BEGIN(INITIAL);}
+<STRING_SINGLE,STRING_DOUBLE>[\n] {ECHO; BEGIN(INITIAL);}
+<STRING_SINGLE,STRING_DOUBLE,STRING_LINES>(.|[\n]) {ECHO;}
+(.|\n) {ECHO;}
 %%
 
 int yywrap() {
-  puts("");
+
   return 1;
 }
 

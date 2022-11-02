@@ -3,8 +3,8 @@
 #include <stddef.h>
 int yywrap();
 int yylex();
-size_t num_of_lines = 0;
-size_t num_of_words = 0;
+static size_t num_of_lines = 0;
+static size_t num_of_words = 0;
 %}
 
 

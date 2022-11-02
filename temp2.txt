@@ -1,4 +1,0 @@
-Ala ma kota
-Kot ma kotke
-Num of lines: 2
-Num of words: 19
