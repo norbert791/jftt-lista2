@@ -4,8 +4,8 @@
 #include<stddef.h>
 
 typedef enum ERevPolCalcOperator {
-  PLUS,
-  MINUS,
+  SUM,
+  SUBT,
   MULT,
   DIV,
   MOD,
@@ -15,6 +15,7 @@ typedef enum ERevPolCalcOperator {
 typedef enum ERevPolCalcError {
   NULL_PTR = 1,
   CALC_MEM_MAX,
+  CALC_ERROR, //Divide into mismatch between num of operands and operators, misplaced operand and empty stack
 } ERevPolCalcError;
 
 typedef struct RevPolCalc RevPolCalc;
