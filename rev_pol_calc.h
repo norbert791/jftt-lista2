@@ -23,6 +23,7 @@ RevPolCalc* rev_pol_calc_new(size_t num_of_elements);
 void rev_pol_calc_delete(RevPolCalc* calc);
 void rev_pol_calc_push_operator(RevPolCalc* calc, ERevPolCalcOperator op);
 void rev_pol_calc_push_value(RevPolCalc* calc, long long value);
+void rev_pol_calc_clear(RevPolCalc* calc);
 long long rev_pol_calc_resolve(RevPolCalc* calc);
 
 #endif /* REV_POL_CALC_H */

@@ -8,6 +8,7 @@
     "type_traits": "cpp",
     "utility": "cpp",
     "system_error": "c",
-    "string_view": "c"
+    "string_view": "c",
+    "stdbool.h": "c"
   }
 }
