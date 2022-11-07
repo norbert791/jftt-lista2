@@ -7,11 +7,13 @@ static size_t num_of_lines = 0;
 static size_t num_of_words = 0;
 %}
 
+%s FILE_BEGIN_FOUND
 
 %%
-^[\t ]([\t ]*) {printf("");}
 ([\t ]*)[\t ]$ {printf("");}
-[\t ]+ {printf(" ");}
+<INITIAL>[\t ]+/([^\t \n]) {printf("");BEGIN(FILE_BEGIN_FOUND);}
+[\t ]+/([^\t \n]) {printf(" ");}
+[\t ]+ {printf("");}
 [^\t \n]+ {ECHO; num_of_words++;};
 (\n([\t \n]*))/([^\t ]) {printf("\n"); num_of_lines++;}
 \n([\t \n]*) {printf(""); num_of_lines++;}
