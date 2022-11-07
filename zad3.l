@@ -8,16 +8,19 @@ int yylex();
 static bool docs_comments_on = false;
 %}
 
+ESC_NEW ([\\][\n])?
+
 %x COMMENT_LINE COMMENT_MULTI STRING CHAR DOC_COMMENT_LINE DOC_COMMENT_MULTI
 
 %%
-([/]{3})|([/]{2}[!]) {if (docs_comments_on) {BEGIN(DOC_COMMENT_LINE); ECHO;} else {BEGIN(COMMENT_LINE);}}
-[/]{2} {BEGIN(COMMENT_LINE);}
+(([/]{ESC_NEW}){2}[/])|([/]{ESC_NEW}[/]{ESC_NEW}[!]) {if (docs_comments_on) {BEGIN(DOC_COMMENT_LINE); ECHO;} else {BEGIN(COMMENT_LINE);}}
+[/]{ESC_NEW}[/] {BEGIN(COMMENT_LINE);}
+<COMMENT_LINE,STRING,CHAR,DOC_COMMENT_LINE>[\\][\n] {printf("\n");}
 <COMMENT_LINE,STRING,CHAR,DOC_COMMENT_LINE>[\n] {BEGIN(INITIAL); ECHO;}
-([/][*][*])|([/][*][!]) {if (docs_comments_on) {BEGIN(DOC_COMMENT_MULTI); ECHO;} else {BEGIN(COMMENT_MULTI);}}
-([/][*]) {BEGIN(COMMENT_MULTI);}
-<COMMENT_MULTI>([*][/]) {BEGIN(INITIAL);}
-<DOC_COMMENT_MULTI>([*][/]) {BEGIN(INITIAL); ECHO;}
+([/]{ESC_NEW}[*]{ESC_NEW}[*])|([/]{ESC_NEW}[*]{ESC_NEW}[!]) {if (docs_comments_on) {BEGIN(DOC_COMMENT_MULTI); ECHO;} else {BEGIN(COMMENT_MULTI);}}
+([/]{ESC_NEW}[*]) {BEGIN(COMMENT_MULTI);}
+<COMMENT_MULTI>([*]{ESC_NEW}[/]) {BEGIN(INITIAL);}
+<DOC_COMMENT_MULTI>([*]{ESC_NEW}[/]) {BEGIN(INITIAL); ECHO;}
 <STRING>["] {BEGIN(INITIAL); ECHO;}
 <CHAR>['] {BEGIN(INITIAL); ECHO;}
 ["] {BEGIN(STRING); ECHO;}
