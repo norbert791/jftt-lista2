@@ -1,3 +1,0 @@
-Dodaj wykrywanie łamania stringów:
-  "
-  " nie jest stringiem

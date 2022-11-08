@@ -1,5 +1,5 @@
 # Object file
-*.o
+*.bin
 
 # Ada Library Information
 *.ali
@@ -7,3 +7,5 @@
 # lex output
 
 *.yy.c
+
+*.vscode
