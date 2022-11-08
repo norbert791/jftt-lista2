@@ -15,7 +15,9 @@ typedef enum ERevPolCalcOperator {
 typedef enum ERevPolCalcError {
   NULL_PTR = 1,
   CALC_MEM_MAX,
-  CALC_ERROR, //Divide into mismatch between num of operands and operators, misplaced operand and empty stack
+  CALC_NULL_DIVISION,
+  CALC_ERROR,
+  CALC_EMPTY,
 } ERevPolCalcError;
 
 typedef struct RevPolCalc RevPolCalc;

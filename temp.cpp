@@ -1,44 +1,37 @@
-#include "test/*asdf*/header.h"
-#include <stdio.h>
-#include "foo/*bar*/baz.h"
-
-
-int foo();
-
-int bar(); 
-
-
-int g_global_var = 1;
+#include<iostream>
 
 
 
 
-int baz();
 
-
-
-
-volatile int g_global;
-
-
-int main(int argc, const char** argv)
-{
-    printf("/* foo bar");
-    
-
-    
+static int gcd(unsigned long long a, unsigned long long b) {
+  
+  while (b > 0) {
     
 
 
-    foo();
-    
-
-/\
-
-
-
-    foo();
-
-
-    return 1;
+    unsigned long long temp = a % b;
+    a = b; 
+    b = temp; 
+  }
+  return a;
 }
+
+
+
+
+int main() {
+  
+  char a = '//';
+  "
+  
+  "
+
+  '
+  
+  '
+  std::cout<<a<<std::endl;
+}
+
+
+

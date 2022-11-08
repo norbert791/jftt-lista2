@@ -20,6 +20,11 @@ static inline bool parseNumber(const char str[const static 1]) {
     return false;
   }
   rev_pol_calc_push_value(calc, result);
+  if (errno != 0) {
+    puts("Mem error: too many operators/operands");
+    return false;
+  }
+  errno = 0;
   return true;
 }
 
@@ -36,6 +41,17 @@ static inline ERevPolCalcOperator convertStrOp(const char str[const static 2]) {
   return 0;
 }
 
+static inline bool parseOperator(const char str[const static 2]) {
+  errno = 0;
+  rev_pol_calc_push_operator(calc, convertStrOp(str));
+  if (errno != 0) {
+    puts("Mem error: too many operators/operands");
+    return false;
+  }
+  errno = 0;
+  return true;
+}
+
 static inline void finilizeComputation(RevPolCalc* calc) {
   errno = 0;
   long long result = rev_pol_calc_resolve(calc);
@@ -47,10 +63,15 @@ static inline void finilizeComputation(RevPolCalc* calc) {
       puts("NULL_PTR error");
       break;
     case CALC_MEM_MAX:
-      puts("Memory failer: the number of operations/operands is too large");
+      puts("Memory fail: the number of operations/operands is too large");
+      break;
+    case CALC_NULL_DIVISION:
+      puts("Illegal operation: division by 0");
+      break;
+    case CALC_EMPTY:
       break;
     case CALC_ERROR:
-      puts("CALC_ERROR");
+      puts("The number of operands and operations does not match");
       break;
   }
   errno = 0;
@@ -63,16 +84,18 @@ static void cleanCalc(void) {
 %}
 
 %%
-[-]?([0-9])+ {if(!continueWork || !parseNumber(yytext)) {continueWork = false;} ECHO;}
-[+\-*/%^] {if (continueWork) {rev_pol_calc_push_operator(calc, convertStrOp(yytext));} ECHO;}
-[\n] {if (continueWork) {puts(""); finilizeComputation(calc);} rev_pol_calc_clear(calc); ECHO;}
-(quit)|(q) {exit(EXIT_SUCCESS);}
+[-]?([0-9])+ {if(!continueWork || !parseNumber(yytext)) {continueWork = false;}}
+[+\-*/%^] {if (!continueWork || !parseOperator(yytext)) {continueWork = false;}}
+[\n] {if (continueWork) {puts(""); finilizeComputation(calc);} rev_pol_calc_clear(calc);}
+^((quit)|(q)) {exit(EXIT_SUCCESS);}
+[^\t \n] {if(continueWork) {printf("\nUnknown symbol: %s\n", yytext); rev_pol_calc_clear(calc); continueWork = false;}}
 %%
 
 int yywrap() {
 
   return 1;
 }
+
 
 int main(void) {
   sigset_t mask;
